@@ -1,0 +1,24 @@
+[
+    {
+        "model": "courses.payment",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "pay_date": "2023-09-14",
+            "pay_course": 3,
+            "amount": 5000.00,
+            "payment_method": "cash"
+        }
+    },
+    {
+        "model": "courses.payment",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "pay_date": "2023-09-15",
+            "pay_course": 3,
+            "amount": 7500.00,
+            "payment_method": "transfer"
+        }
+    }
+]
