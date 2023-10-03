@@ -12,7 +12,13 @@ class Course(models.Model):
     - title: Название курса
     - preview: Превью курса (картинка)
     - description: Описание курса
+    - owner: Автор
     """
+    owner = models.ForeignKey(
+        User, related_name="course",
+        on_delete=models.CASCADE,
+        **NULLABLE
+    )
     title = models.CharField(
         max_length=100,
         verbose_name='название'
@@ -42,7 +48,13 @@ class Lesson(models.Model):
      - description: Описание урока
      - preview: Превью урока (картинка)
      - video_link: Ссылка на видеоурок
+     - owner: Автор
      """
+    owner = models.ForeignKey(
+        User, related_name="lesson",
+        on_delete=models.CASCADE,
+        **NULLABLE
+    )
     title = models.CharField(
         max_length=100,
         verbose_name='название'

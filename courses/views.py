@@ -1,4 +1,6 @@
 from rest_framework import viewsets, generics, filters
+
+from .permissions import IsManagers
 from django_filters.rest_framework import DjangoFilterBackend
 
 from .models import Course, Lesson, Payment
@@ -6,14 +8,21 @@ from .serializers import CourseSerializer, LessonSerializer, PaymentSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsManagers]
     serializer_class = CourseSerializer
-    queryset = Course.objects.all()
+
+    def get_queryset(self):
+        queryset = Course.objects.all()
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(owner=self.request.user)
+        return queryset
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
     """
     Создать новый урок.
     """
+    permission_classes = [IsManagers]
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
 
@@ -23,8 +32,12 @@ class LessonListAPIView(generics.ListAPIView):
     Получить список всех уроков.
     """
     serializer_class = LessonSerializer
-    queryset = Lesson.objects.all()
 
+    def get_queryset(self):
+        queryset = Lesson.objects.all()
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(owner=self.request.user)
+        return queryset
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
     """
@@ -46,6 +59,7 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
     """
     Удалить существующий урок.
     """
+    permission_classes = [IsManagers]
     queryset = Lesson.objects.all()
 
 
