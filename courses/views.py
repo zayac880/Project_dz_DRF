@@ -26,7 +26,8 @@ class LessonCreateAPIView(generics.CreateAPIView):
     """
     Создать новый урок.
     """
-    permission_classes = [IsManagers]
+    #permission_classes = [IsManagers]
+    permission_classes = [AllowAny]
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
 
@@ -57,6 +58,7 @@ class LessonUpdateAPIView(generics.UpdateAPIView):
     """
     Обновить существующий урок.
     """
+    permission_classes = [AllowAny]
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
 
