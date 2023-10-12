@@ -9,6 +9,8 @@ packages = [{include = "project_dz_drf"}]
 [tool.poetry.dependencies]
 python = "^3.11"
 django = "^4.2.5"
+drf-yasg = "^1.21.7"
+stripe = "^6.7.0"
 
 
 [build-system]

@@ -31,6 +31,9 @@ class Course(models.Model):
     description = models.TextField(
         verbose_name='описание'
     )
+    price = models.IntegerField(
+        verbose_name='цена'
+    )
 
     def __str__(self):
         return f'{self.title}, {self.preview}, {self.description}'
@@ -89,13 +92,13 @@ class Lesson(models.Model):
 
 class Payment(models.Model):
     """
-    Модель для представления уроков.
+    Модель для представления платежей.
     - id: Идентификатор платежа (автогенерируется)
     - user: пользователь для оплаты
-    - pay_date: Название платежа
-    - description: Описание платежа
-    - preview: Превью урока (картинка)
-    - video_link: Ссылка на видеоурок
+    - pay_date: дата оплаты
+    - pay_course: оплаченный курс
+    - amount: сумма оплаты
+    - payment_method: способ оплаты
     """
     user = models.ForeignKey(
         User,
@@ -103,7 +106,8 @@ class Payment(models.Model):
         verbose_name='пользователь'
     )
     pay_date = models.DateField(
-        verbose_name='дата оплаты'
+        verbose_name='дата оплаты',
+        auto_now_add=True
     )
     pay_course = models.ForeignKey(
         'courses.Course',

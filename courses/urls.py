@@ -2,8 +2,8 @@ from django.urls import path
 from courses.apps import CoursesConfig
 from rest_framework.routers import DefaultRouter
 
-from courses.views import CourseViewSet, LessonCreateAPIView, LessonListAPIView,\
-    LessonRetrieveAPIView, LessonUpdateAPIView, LessonDestroyAPIView, PaymentListAPIView
+from courses.views import CourseViewSet, LessonCreateAPIView, LessonListAPIView, \
+    LessonRetrieveAPIView, LessonUpdateAPIView, LessonDestroyAPIView, PaymentListAPIView, PaymentAPIView
 
 # Получаем имя приложения
 app_name = CoursesConfig.name
@@ -19,4 +19,5 @@ urlpatterns = [
     path('lesson/update/<int:pk>/', LessonUpdateAPIView.as_view(), name='lesson-update'),
     path('lesson/delete/<int:pk>/', LessonDestroyAPIView.as_view(), name='lesson-delete'),
     path('payment/', PaymentListAPIView.as_view(), name='payment-list'),
+    path('make-payment/<int:course_id>/', PaymentAPIView.as_view(), name='make-payment'),
 ] + router.urls
