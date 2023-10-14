@@ -28,6 +28,17 @@ SECRET_KEY = 'django-insecure-j%(g39nhh90xd)!r4o@+j$2_r06&8g25f1kgkvi4&me_-uxw6p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+load_dotenv()
+
+# EMAIL SENDING SETTINGS
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 ALLOWED_HOSTS = []
 
 
@@ -41,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'drf_yasg',
+    'django_celery_beat',
     'django_filters',
     'rest_framework',
     'rest_framework_simplejwt',
@@ -158,6 +170,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(
         days=int(os.getenv('REFRESH_TOKEN_LIFETIME_DAYS', 1))
     ),
+    'UPDATE_LAST_LOGIN': True,
 }
 
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
@@ -165,3 +178,29 @@ STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
 SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False
 }
+
+# Настройки для Celery
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_BEAT_SCHEDULE = {
+    'deleted_user': {
+        'task': 'users.tasks.deactivate_user',
+        'schedule': timedelta(days=1)
+    }
+}
+
+# URL-адрес брокера сообщений
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+# URL-адрес брокера результатов, также Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Часовой пояс для работы Celery
+CELERY_TIMEZONE = "Australia/Tasmania"
+
+# Флаг отслеживания выполнения задач
+CELERY_TASK_TRACK_STARTED = True
+
+# Максимальное время на выполнение задачи
+CELERY_TASK_TIME_LIMIT = 30 * 60

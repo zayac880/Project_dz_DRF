@@ -31,6 +31,14 @@ class Course(models.Model):
     description = models.TextField(
         verbose_name='описание'
     )
+    date_created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='дата создания'
+    )
+    date_updated = models.DateTimeField(
+        auto_now=True,
+        verbose_name='дата обновления'
+    )
     price = models.IntegerField(
         verbose_name='цена'
     )

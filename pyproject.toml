@@ -11,6 +11,10 @@ python = "^3.11"
 django = "^4.2.5"
 drf-yasg = "^1.21.7"
 stripe = "^6.7.0"
+eventlet = "^0.33.3"
+redis = "^5.0.1"
+celery = "^5.3.4"
+django-celery-beat = "^2.5.0"
 
 
 [build-system]

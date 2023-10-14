@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import stripe
 
 from rest_framework import viewsets, generics, filters, status
@@ -6,6 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 
 from config import settings
+from subscriptions.tasks import mail
 from .paginators import CoursesPaginator
 from .permissions import IsManagers
 from django_filters.rest_framework import DjangoFilterBackend
@@ -37,6 +40,23 @@ class LessonCreateAPIView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        course_id = serializer.validated_data['course'].pk
+        course = Course.objects.filter(pk=course_id).first()
+        course.date_updated = datetime.now()
+        course.save()
+        self.perform_create(serializer)
+        mail.delay(course.pk, self.request.user.email)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        lesson = serializer.save()
+        lesson.owner = self.request.user
+        lesson.save()
 
 
 class LessonListAPIView(generics.ListAPIView):
@@ -76,6 +96,14 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
     """
     permission_classes = [IsManagers]
     queryset = Lesson.objects.all()
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        course = Course.objects.filter(pk=instance.course.pk).first()
+        course.date_updated = datetime.now()
+        course.save()
+        mail.delay(course)
+        return super().destroy(request, *args, **kwargs)
 
 
 class PaymentListAPIView(generics.ListAPIView):

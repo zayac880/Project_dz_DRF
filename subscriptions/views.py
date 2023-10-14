@@ -10,10 +10,9 @@ class SubscriberAPIView(APIView):
     """
     Создать подписчика.
     """
-
     def post(self, request, course_id):
         user = request.user
-        serializer = SubscriberSerializer(data={'user': user.pk, 'course': course_id})
+        serializer = SubscriberSerializer(data={'user': user.pk, 'course': course_id, 'subscribed': True})
         if serializer.is_valid():
             serializer.save()
             return Response(data={'message': f'Вы успешно подписались на курс №{course_id}'},
