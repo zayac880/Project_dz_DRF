@@ -105,9 +105,8 @@ DATABASES = {
         'NAME': 'project_drf',
         'USER': os.getenv('USER_BASE'),
         'PASSWORD': os.getenv('PASSWORD_BASE'),
-        'HOST': 'db',  # Имя контейнера базы данных в Docker
+        'HOST': 'postgres',  # Имя контейнера базы данных в Docker
         'PORT': '5432',  # Порт базы данных PostgreSQL
-
     }
 }
 

@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: project_dz_drf
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - '8000:8000'
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: alzy
+      POSTGRES_USER: postgres
+      POSTGRES_DB: project_drf
+    ports:
+      - '5432:5432'
