@@ -103,8 +103,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'project_drf',
-        'USER': os.getenv('USER_BASE'),
-        'PASSWORD': os.getenv('PASSWORD_BASE'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
         'HOST': 'postgres',  # Имя контейнера базы данных в Docker
         'PORT': '5432',  # Порт базы данных PostgreSQL
     }
